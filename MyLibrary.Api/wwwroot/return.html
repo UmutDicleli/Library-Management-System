@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitap İadesi</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">📘 Kitap İade Et</h2>
+
+        <div class="card shadow p-4">
+
+            <label>Email</label>
+            <input id="email" class="form-control mb-3" placeholder="ornek@mail.com">
+
+            <label>Kitap Adı</label>
+            <input id="book" class="form-control mb-4" placeholder="Kitap Adını Girin">
+
+            <button class="btn btn-danger w-100" onclick="returnBook()">Kitabı İade Et</button>
+
+        </div>
+
+        <a href="index.html" class="btn btn-link mt-3">← Ana Sayfaya Dön</a>
+    </div>
+
+    <script>
+async function returnBook() {
+
+    const payload = {
+        memberEmail: document.getElementById("email").value,
+        bookTitle: document.getElementById("book").value
+    };
+
+    const response = await fetch("/api/Rent/returnbook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    const text = await response.text();
+    alert(text);
+}
+    </script>
+
+</body>
+</html>
