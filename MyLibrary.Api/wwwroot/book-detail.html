@@ -1,0 +1,72 @@
+﻿
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kitap Detayı</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background: #f4f6f8;
+        }
+
+        .cover {
+            max-height: 420px;
+            object-fit: contain;
+            background: #fff;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container my-5">
+
+        <a href="catalog-books.html" class="btn btn-link mb-4">← Kataloğa Dön</a>
+
+        <div id="detail" class="card shadow p-4"></div>
+
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const publishId = params.get("publishId");
+
+        async function loadDetail() {
+            const res = await fetch("/api/Admin/catalog");
+            const data = await res.json();
+
+            const book = data.find(x => x.publishId == publishId);
+
+            if (!book) {
+                document.getElementById("detail").innerHTML =
+                    "<h5>Kitap bulunamadı.</h5>";
+                return;
+            }
+
+            document.getElementById("detail").innerHTML = `
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        <img src="${book.imageUrl || '/images/no-cover.png'}"
+                             class="img-fluid cover">
+                    </div>
+                    <div class="col-md-8">
+                        <h3 class="fw-bold">${book.title}</h3>
+                        <p><strong>Yazar:</strong> ${book.author}</p>
+                        <p><strong>Yayınevi:</strong> ${book.publisher}</p>
+                        <p><strong>Kopya Sayısı:</strong> ${book.totalCopies}</p>
+                        <hr>
+                        <p>${book.description || "Bu kitap için açıklama yok."}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        loadDetail();
+    </script>
+
+
+</body>
+</html>
